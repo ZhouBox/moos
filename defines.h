@@ -14,7 +14,7 @@
 DEFINE_NAMESPACE_ZZ_BEGIN
 
 
-
+const int THREAD_TICK = 30;
 
 
 typedef std::chrono::milliseconds ms;

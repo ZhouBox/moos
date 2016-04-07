@@ -52,6 +52,13 @@ auto add(const int t1_, const int t2_) -> decltype(t1_ + t2_)
 }
 
 
+void addfun(const std::thread::id& id_)
+{
+    Looper* _looper = Looper::getLooper(id_);
+    _looper->enqueue(new CommonTask([](){ std::cout << "add fun task id:" << std::this_thread::get_id() << std::endl; }));
+}
+
+
 struct Add
 {
     int add(const int t1_, const int t2_)
@@ -71,6 +78,10 @@ int main(int argc, char *argv[])
     UN_USE(argv);
 
 
+
+
+
+
     zz::CommonTask cTask_(zz::add, 1, 2);
 
     cTask_.run();
@@ -87,7 +98,15 @@ int main(int argc, char *argv[])
     zz::Looper* _looper = zz::Looper::currentLooper();
 
     zz::InputEventThread iTh(_looper);
+
+
     iTh.start();
+
+    std::this_thread::sleep_for(std::chrono::seconds(1));
+
+
+
+    _looper->enqueue(new zz::CommonTask(zz::addfun, iTh.getId()));
 
 
     _looper->exec_once();

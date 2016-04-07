@@ -32,6 +32,23 @@ public:
         return _re;
     }
 
+    static Looper* getLooper(const std::thread::id& id_)
+    {
+        auto _looper = m_loopers.find(id_);
+        Looper *_re = NULL;
+        if (_looper != m_loopers.end()) {
+            _re = (*_looper).second;
+        }
+        else {
+            _re = new Looper();
+            m_loopers[id_] = _re;
+        }
+        return _re;
+    }
+
+
+
+
 
 
     void enqueue(TaskBase* t_)
@@ -44,33 +61,36 @@ public:
         return m_queue.dequeue(t_, ms_);
     }
 
-    void exec_once()
+    void exec_once(int ms_ = -1)
     {
         TaskBase* _task = NULL;
-        if (m_queue.dequeue(_task)) {
-            if (_task->type() == TASK_COMMON) {
-                _task->run();
-                delete _task;
-            }
-
-            if (_task->type() == TASK_DELAY) {
-                if (_task->ttl() == 0) {
+        do {
+            if (m_queue.dequeue(_task, ms_)) {
+                if (_task->type() == TASK_COMMON) {
                     _task->run();
                     delete _task;
+                    break;
                 }
-                else {
-                    m_queue.enqueue(_task);
+
+                if (_task->type() == TASK_DELAY) {
+                    if (_task->ttl() == 0) {
+                        _task->run();
+                        delete _task;
+                    }
+                    else {
+                        m_queue.enqueue(_task);
+                    }
                 }
             }
-        }
+        } while(0);
     }
 
 
-    void exec()
+    void exec(int ms_ = -1)
     {
         while(true) {
             TaskBase* _task = NULL;
-            if (m_queue.dequeue(_task)) {
+            if (m_queue.dequeue(_task, ms_)) {
                 if (_task->type() == TASK_COMMON) {
                     _task->run();
                     delete _task;
