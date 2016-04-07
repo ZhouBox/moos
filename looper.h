@@ -1,6 +1,10 @@
 #ifndef LOOPER_H
 #define LOOPER_H
 
+
+#include <map>
+#include <thread>
+
 #include "defines.h"
 
 #include "task_queue.h"
@@ -12,6 +16,24 @@ DEFINE_NAMESPACE_ZZ_BEGIN
 class Looper
 {
 public:
+
+
+    static Looper* currentLooper()
+    {
+        auto _looper = m_loopers.find(std::this_thread::get_id());
+        Looper *_re = NULL;
+        if (_looper != m_loopers.end()) {
+            _re = (*_looper).second;
+        }
+        else {
+            _re = new Looper();
+            m_loopers[std::this_thread::get_id()] = _re;
+        }
+        return _re;
+    }
+
+
+
     void enqueue(TaskBase* t_)
     {
         return m_queue.enqueue(t_);
@@ -70,8 +92,16 @@ public:
     }
 
 private:
+    Looper() {}
+
+
+
     TaskQueue m_queue;
+    static std::map<std::thread::id, Looper*> m_loopers;
+
 };
+
+std::map<std::thread::id, Looper*> Looper::m_loopers = std::map<std::thread::id, Looper*>();
 
 
 DEFINE_NAMESPACE_ZZ_END

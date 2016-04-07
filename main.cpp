@@ -47,7 +47,7 @@ private:
 
 auto add(const int t1_, const int t2_) -> decltype(t1_ + t2_)
 {
-    std::cout << t1_ << "+" << t2_ << "=" << t1_ + t2_;
+    std::cout << t1_ << "+" << t2_ << "=" << t1_ + t2_ << std::endl;
     return t1_ + t2_;
 }
 
@@ -84,15 +84,15 @@ int main(int argc, char *argv[])
     c1Task_.run();
 
 
-    zz::Looper looper;
+    zz::Looper* _looper = zz::Looper::currentLooper();
 
-    zz::InputEventThread iTh(&looper);
+    zz::InputEventThread iTh(_looper);
     iTh.start();
 
 
-    looper.exec_once();
+    _looper->exec_once();
 
-    looper.exec();
+    _looper->exec();
 
 
 
