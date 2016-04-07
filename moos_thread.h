@@ -6,8 +6,8 @@
 #include <atomic>
 
 
-#include "defines.h"
-#include "looper.h"
+#include "moos_defines.h"
+#include "moos_looper.h"
 
 
 DEFINE_NAMESPACE_ZZ_BEGIN

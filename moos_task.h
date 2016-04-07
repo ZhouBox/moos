@@ -3,8 +3,8 @@
 
 #include <memory>
 
-#include "defines.h"
-#include "task_policy.h"
+#include "moos_defines.h"
+#include "moos_task_policy.h"
 
 
 DEFINE_NAMESPACE_ZZ_BEGIN

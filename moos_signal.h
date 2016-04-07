@@ -4,7 +4,7 @@
 #include <memory>
 #include <list>
 
-#include "defines.h"
+#include "moos_defines.h"
 
 DEFINE_NAMESPACE_ZZ_BEGIN
 

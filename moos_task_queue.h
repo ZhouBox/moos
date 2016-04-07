@@ -6,7 +6,7 @@
 #include <mutex>
 
 
-#include "defines.h"
+#include "moos_defines.h"
 
 
 DEFINE_NAMESPACE_ZZ_BEGIN
@@ -56,7 +56,7 @@ private:
 
 
 
-#include "task.h"
+#include "moos_task.h"
 
 typedef Queue<TaskBase*> TaskQueue;
 

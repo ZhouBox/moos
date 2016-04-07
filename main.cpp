@@ -1,9 +1,9 @@
 #include <iostream>
 
 
-#include "task.h"
+#include "moos_task.h"
 #include "moos_thread.h"
-#include "looper.h"
+#include "moos_looper.h"
 #include "moos_signal.h"
 
 #include <stdlib.h>

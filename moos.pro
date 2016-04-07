@@ -6,13 +6,13 @@ CONFIG -= qt
 SOURCES += main.cpp
 
 HEADERS += \
-    defines.h \
-    task.h \
-    task_policy.h \
     moos_thread.h \
-    task_queue.h \
-    looper.h \
-    moos_signal.h
+    moos_signal.h \
+    moos_task.h \
+    moos_task_policy.h \
+    moos_task_queue.h \
+    moos_looper.h \
+    moos_defines.h
 
 
 LIBS += -pthread

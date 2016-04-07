@@ -5,9 +5,9 @@
 #include <map>
 #include <thread>
 
-#include "defines.h"
+#include "moos_defines.h"
 
-#include "task_queue.h"
+#include "moos_task_queue.h"
 
 
 DEFINE_NAMESPACE_ZZ_BEGIN
