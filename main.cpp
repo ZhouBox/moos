@@ -4,6 +4,7 @@
 #include "task.h"
 #include "moos_thread.h"
 #include "looper.h"
+#include "moos_signal.h"
 
 #include <stdlib.h>
 
@@ -82,6 +83,9 @@ int main(int argc, char *argv[])
 
 
 
+
+
+
     zz::CommonTask cTask_(zz::add, 1, 2);
 
     cTask_.run();
@@ -89,6 +93,12 @@ int main(int argc, char *argv[])
 
 
     zz::Add _add;
+
+    zz::Signal<int, int> s;
+    s.connect(&_add, &zz::Add::add);
+    s.emit(1, 2);
+    s.emit(1, 2);
+
 
     zz::CommonTask c1Task_(std::bind(&zz::Add::add, &_add, 1, 2));
 

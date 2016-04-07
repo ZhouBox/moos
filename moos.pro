@@ -11,9 +11,10 @@ HEADERS += \
     task_policy.h \
     moos_thread.h \
     task_queue.h \
-    looper.h
+    looper.h \
+    moos_signal.h
 
 
 LIBS += -pthread
 
-DEFINES +=
+DEFINES += _GLIBCXX_USE_NANOSLEEP

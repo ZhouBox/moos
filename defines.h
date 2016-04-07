@@ -25,6 +25,12 @@ enum
     TASK_DELAY = 1 << 1,
 };
 
+enum CONNECT_TYPE {
+    CONNECT_SYNC,
+    CONNECT_AYNC,
+    CONNECT_AUTO
+};
+
 DEFINE_NAMESPACE_ZZ_END
 
 
