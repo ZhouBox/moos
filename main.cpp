@@ -5,6 +5,7 @@
 #include "moos_thread.h"
 #include "moos_looper.h"
 #include "moos_signal.h"
+#include "moos_object.h"
 
 #include <stdlib.h>
 
@@ -12,13 +13,27 @@
 DEFINE_NAMESPACE_ZZ_BEGIN
 
 
+
+struct Add : public MoosObject
+{
+
+    int add(const int t1_, const int t2_)
+    {
+        std::cout << t1_ << "+" << t2_ << "=" << t1_ + t2_ << std::endl;
+        return t1_ + t2_;
+    }
+};
+
+
+
 class InputEventThread : public Thread
 {
 public:
-    InputEventThread(Looper* looper_)
+    InputEventThread(Looper* looper_, Add* add_)
         : m_looper(looper_)
     {
-
+        s.connect(add_, &Add::add);
+        _t = add_;
     }
 
     bool threadRun()
@@ -35,12 +50,18 @@ public:
             m_looper->enqueue(_task);
         }
 
+        s.emit(rand(), rand());
+
+        s.disconnect(_t, &Add::add);
+
         return true;
     }
 
 
 private:
     Looper* m_looper;
+    Signal<int, int> s;
+    Add* _t;
 
 };
 
@@ -59,21 +80,6 @@ void addfun(const std::thread::id& id_)
     _looper->enqueue(new CommonTask([](){ std::cout << "add fun task id:" << std::this_thread::get_id() << std::endl; }));
 }
 
-
-struct Add
-{
-
-    Looper* eventLooper()
-    {
-        return NULL;
-    }
-
-    int add(const int t1_, const int t2_)
-    {
-        std::cout << t1_ << "+" << t2_ << "=" << t1_ + t2_ << std::endl;
-        return t1_ + t2_;
-    }
-};
 
 DEFINE_NAMESPACE_ZZ_END
 
@@ -100,10 +106,6 @@ int main(int argc, char *argv[])
 
     zz::Add _add;
 
-    zz::Signal<int, int> s;
-    s.connect(&_add, &zz::Add::add);
-    s.emit(1, 2);
-    s.emit(1, 2);
 
 
     zz::CommonTask c1Task_(std::bind(&zz::Add::add, &_add, 1, 2));
@@ -113,7 +115,7 @@ int main(int argc, char *argv[])
 
     zz::Looper* _looper = zz::Looper::currentLooper();
 
-    zz::InputEventThread iTh(_looper);
+    zz::InputEventThread iTh(_looper, &_add);
 
 
     iTh.start();

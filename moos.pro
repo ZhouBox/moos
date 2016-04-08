@@ -12,7 +12,8 @@ HEADERS += \
     moos_task_policy.h \
     moos_task_queue.h \
     moos_looper.h \
-    moos_defines.h
+    moos_defines.h \
+    moos_object.h
 
 
 LIBS += -pthread

@@ -5,6 +5,7 @@
 #include <list>
 #include <type_traits>
 #include <cassert>
+#include <algorithm>
 
 #include "moos_defines.h"
 #include "moos_looper.h"
@@ -16,49 +17,48 @@ DEFINE_NAMESPACE_ZZ_BEGIN
 HAS_MEMBER(eventLooper);
 
 template <typename ... Args>
-class Slot
+struct __Impl_signal_base
+{
+    virtual void run(Args&& ... args_) = 0;
+    virtual CommonTask* convertTask(Args&& ... args_) = 0;
+};
+
+template <typename _Class, typename _Callable, typename ... Args>
+struct __Impl_signal : public __Impl_signal_base<Args...>
+{
+    __Impl_signal(_Class* object_, const _Callable& fun_)
+        : m_object(object_)
+        , m_Mfun(fun_)
+    {
+
+    }
+
+
+    CommonTask* convertTask(Args&& ... args_)
+    {
+        return new CommonTask(std::bind(m_Mfun, m_object, std::forward<Args>(args_)...));
+    }
+
+    void run(Args&& ... args_)
+    {
+        (m_object->*m_Mfun)(std::forward<Args>(args_)...);
+    }
+
+    _Class* m_object;
+    _Callable m_Mfun;
+};
+
+template <typename ... Args>
+struct Slot
 {
 
 
-
-    struct __Impl_base
-    {
-        virtual void run(Args&& ... args_) = 0;
-        virtual CommonTask* convertTask(Args&& ... args_) = 0;
-    };
-
-    template <typename _Class, typename _Callable>
-    struct __Impl : public __Impl_base
-    {
-        __Impl(_Class* object_, const _Callable& fun_)
-            : m_object(object_)
-            , m_Mfun(fun_)
-        {
-
-        }
-
-
-        CommonTask* convertTask(Args&& ... args_)
-        {
-            return new CommonTask(std::bind(m_Mfun, m_object, std::forward<Args>(args_)...));
-        }
-
-        void run(Args&& ... args_)
-        {
-            (m_object->*m_Mfun)(std::forward<Args>(args_)...);
-        }
-
-        _Class* m_object;
-        _Callable m_Mfun;
-    };
-
-public:
     template <typename _Class, typename _Callable>
     Slot(_Class* object_, const _Callable& fun_, CONNECT_TYPE type_)
         : m_type(type_)
     {
         static_assert(has_member_eventLooper<_Class>::value, "Class has not in a event looper!!!");
-        m_m = std::make_shared<__Impl<_Class, _Callable>>(object_, fun_);
+        m_m = std::make_shared<__Impl_signal<_Class, _Callable, Args...>>(object_, fun_);
         m_looper = object_->eventLooper();
     }
 
@@ -89,9 +89,7 @@ public:
 
 
 
-private:
-
-    std::shared_ptr<__Impl_base> m_m;
+    std::shared_ptr<__Impl_signal_base<Args...>> m_m;
     CONNECT_TYPE m_type;
     Looper* m_looper;
 
@@ -106,6 +104,7 @@ private:
 template <typename ... Args>
 class Signal
 {
+
 public:
     Signal()
     {
@@ -115,6 +114,11 @@ public:
     template <typename _Class, typename _Callable>
     bool connect(_Class* object_, const _Callable& fun_, CONNECT_TYPE type_ = CONNECT_AUTO)
     {
+        auto ite = std::find_if(m_slots.begin(), m_slots.end(), FindHelper<_Class, _Callable>(object_, fun_));
+        if (ite != m_slots.end()) {
+            return false;
+        }
+
         Slot<Args...>* _t = new Slot<Args...>(object_, fun_, type_);
         m_slots.push_back(_t);
         return true;
@@ -124,9 +128,12 @@ public:
     template <typename _Class, typename _Callable>
     bool disconnect(_Class* object_, const _Callable& fun_)
     {
-        Slot<Args...>* _t = new Slot<Args...>(object_, fun_);
-        m_slots.push_back(_t);
-        return true;
+        auto ite = std::find_if(m_slots.begin(), m_slots.end(), FindHelper<_Class, _Callable>(object_, fun_));
+        if (ite != m_slots.end()) {
+            m_slots.erase(ite);
+            return true;
+        }
+        return false;
     }
 
 
@@ -164,6 +171,35 @@ public:
 
 private:
     std::list<Slot<Args...>*> m_slots;
+
+
+    template <typename _Class, typename _Callable>
+    struct FindHelper
+    {
+        FindHelper(_Class* object_, const _Callable& fun_)
+            : m_object(object_)
+            , m_Mfun(fun_)
+        {
+
+        }
+
+        bool operator()(Slot<Args...>* val_) const
+        {
+            __Impl_signal<_Class, _Callable, Args...>* _tImpl = static_cast<__Impl_signal<_Class, _Callable, Args...>*>(val_->m_m.get());
+            return (m_object == _tImpl->m_object) && (m_Mfun == _tImpl->m_Mfun);
+        }
+
+        bool operator()(Slot<Args...>* val_)
+        {
+            __Impl_signal<_Class, _Callable, Args...>* _tImpl = static_cast<__Impl_signal<_Class, _Callable, Args...>*>(val_->m_m.get());
+            return (m_object == _tImpl->m_object) && (m_Mfun == _tImpl->m_Mfun);
+        }
+
+
+        _Class* m_object;
+        _Callable m_Mfun;
+
+    };
 
 
 };
