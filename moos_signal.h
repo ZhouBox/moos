@@ -1,5 +1,5 @@
-#ifndef MOOS_Signal_H
-#define MOOS_Signal_H
+#ifndef MOOS_SIGNAL_H
+#define MOOS_SIGNAL_H
 
 #include <memory>
 #include <list>
@@ -230,4 +230,4 @@ DEFINE_NAMESPACE_ZZ_END
 
 
 
-#endif // MOOS_Signal_H
+#endif // MOOS_SIGNAL_H
