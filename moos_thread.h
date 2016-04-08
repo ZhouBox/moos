@@ -57,7 +57,7 @@ private:
         (void*)Looper::currentLooper();
         while(m_running && threadRun())
         {
-            Looper::currentLooper()->exec_once(zz::THREAD_TICK);
+            Looper::currentLooper()->exec_once(THREAD_TICK);
         }
     }
 

@@ -32,7 +32,7 @@ public:
     InputEventThread(Looper* looper_, Add* add_)
         : m_looper(looper_)
     {
-        s.connect(add_, &Add::add);
+        s.connect(add_, &Add::add, CONNECT_SYNC);
         _t = add_;
     }
 
@@ -52,7 +52,7 @@ public:
 
         s.emit(rand(), rand());
 
-        s.disconnect(_t, &Add::add);
+//        s.disconnect(_t, &Add::add);
 
         return true;
     }
