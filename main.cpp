@@ -62,6 +62,12 @@ void addfun(const std::thread::id& id_)
 
 struct Add
 {
+
+    Looper* eventLooper()
+    {
+        return NULL;
+    }
+
     int add(const int t1_, const int t2_)
     {
         std::cout << t1_ << "+" << t2_ << "=" << t1_ + t2_ << std::endl;
