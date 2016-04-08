@@ -19,6 +19,7 @@ HAS_MEMBER(eventLooper);
 template <typename ... Args>
 struct __Impl_Signal_base
 {
+    virtual ~__Impl_Signal_base() {}
     virtual void run(Args&& ... args_) = 0;
     virtual CommonTask* convertTask(Args&& ... args_) = 0;
 };

@@ -10,6 +10,8 @@ DEFINE_NAMESPACE_ZZ_BEGIN
 
 struct TaskPolicy
 {
+
+    virtual ~TaskPolicy() {}
     virtual ms ttl() const
     {
         return ms(0);

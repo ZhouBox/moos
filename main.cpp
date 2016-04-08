@@ -35,6 +35,7 @@ public:
 //        s.connect(add_, &Add::add, CONNECT_SYNC);
         MOOS_CONNECT(s, add_, &Add::add);
         _t = add_;
+
     }
 
     bool threadRun()

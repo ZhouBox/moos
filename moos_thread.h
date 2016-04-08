@@ -22,6 +22,14 @@ public:
 
     }
 
+
+    virtual ~Thread()
+    {
+        if (m_running) {
+            m_running = false;
+        }
+    }
+
     bool start()
     {
         if (m_running) {
