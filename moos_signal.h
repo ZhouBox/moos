@@ -1,5 +1,5 @@
-#ifndef MOOS_SIGNAL_H
-#define MOOS_SIGNAL_H
+#ifndef MOOS_Signal_H
+#define MOOS_Signal_H
 
 #include <memory>
 #include <list>
@@ -17,16 +17,16 @@ DEFINE_NAMESPACE_ZZ_BEGIN
 HAS_MEMBER(eventLooper);
 
 template <typename ... Args>
-struct __Impl_signal_base
+struct __Impl_Signal_base
 {
     virtual void run(Args&& ... args_) = 0;
     virtual CommonTask* convertTask(Args&& ... args_) = 0;
 };
 
 template <typename _Class, typename _Callable, typename ... Args>
-struct __Impl_signal : public __Impl_signal_base<Args...>
+struct __Impl_Signal : public __Impl_Signal_base<Args...>
 {
-    __Impl_signal(_Class* object_, const _Callable& fun_)
+    __Impl_Signal(_Class* object_, const _Callable& fun_)
         : m_object(object_)
         , m_Mfun(fun_)
     {
@@ -58,7 +58,7 @@ struct Slot
         : m_type(type_)
     {
         static_assert(has_member_eventLooper<_Class>::value, "Class has not in a event looper!!!");
-        m_m = std::make_shared<__Impl_signal<_Class, _Callable, Args...>>(object_, fun_);
+        m_m = std::make_shared<__Impl_Signal<_Class, _Callable, Args...>>(object_, fun_);
         m_looper = object_->eventLooper();
     }
 
@@ -89,7 +89,7 @@ struct Slot
 
 
 
-    std::shared_ptr<__Impl_signal_base<Args...>> m_m;
+    std::shared_ptr<__Impl_Signal_base<Args...>> m_m;
     CONNECT_TYPE m_type;
     Looper* m_looper;
 
@@ -185,13 +185,13 @@ private:
 
         bool operator()(Slot<Args...>* val_) const
         {
-            __Impl_signal<_Class, _Callable, Args...>* _tImpl = static_cast<__Impl_signal<_Class, _Callable, Args...>*>(val_->m_m.get());
+            __Impl_Signal<_Class, _Callable, Args...>* _tImpl = static_cast<__Impl_Signal<_Class, _Callable, Args...>*>(val_->m_m.get());
             return (m_object == _tImpl->m_object) && (m_Mfun == _tImpl->m_Mfun);
         }
 
         bool operator()(Slot<Args...>* val_)
         {
-            __Impl_signal<_Class, _Callable, Args...>* _tImpl = static_cast<__Impl_signal<_Class, _Callable, Args...>*>(val_->m_m.get());
+            __Impl_Signal<_Class, _Callable, Args...>* _tImpl = static_cast<__Impl_Signal<_Class, _Callable, Args...>*>(val_->m_m.get());
             return (m_object == _tImpl->m_object) && (m_Mfun == _tImpl->m_Mfun);
         }
 
@@ -217,4 +217,16 @@ private:
 DEFINE_NAMESPACE_ZZ_END
 
 
-#endif // MOOS_SIGNAL_H
+#define MOOS_SIGNAL(...) zz::Signal<__VA_ARGS__>
+
+#define MOOS_CONNECT(Signal, ...) Signal.connect(__VA_ARGS__)
+
+#define MOOS_DISCONNECT(Signal, ...) Signal.disconnect(__VA_ARGS__)
+
+
+#define MOOS_EMIT(Signal, ...) Signal.emit(__VA_ARGS__)
+
+
+
+
+#endif // MOOS_Signal_H

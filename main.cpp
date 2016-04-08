@@ -32,7 +32,8 @@ public:
     InputEventThread(Looper* looper_, Add* add_)
         : m_looper(looper_)
     {
-        s.connect(add_, &Add::add, CONNECT_SYNC);
+//        s.connect(add_, &Add::add, CONNECT_SYNC);
+        MOOS_CONNECT(s, add_, &Add::add);
         _t = add_;
     }
 
@@ -50,9 +51,12 @@ public:
             m_looper->enqueue(_task);
         }
 
-        s.emit(rand(), rand());
+//        s.emit(rand(), rand());
+        MOOS_EMIT(s, rand() % 100, rand() % 100);
 
 //        s.disconnect(_t, &Add::add);
+//        MOOS_DISCONNECT(s, _t, &Add::add);
+
 
         return true;
     }
@@ -60,7 +64,9 @@ public:
 
 private:
     Looper* m_looper;
-    Signal<int, int> s;
+//    Signal<int, int> s;
+    MOOS_SIGNAL(int, int) s;
+
     Add* _t;
 
 };
