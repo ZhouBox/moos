@@ -16,6 +16,10 @@ DEFINE_NAMESPACE_MOOS_BEGIN
 class GraphicItem : public MoosObject
 {
 public:
+
+    static std::thread::id s_main_thread_id;
+
+
     GraphicItem(MoosObject* parent)
         : m_parent(parent)
     {
@@ -26,7 +30,7 @@ public:
 
 private:
 
-    static std::thread::id s_main_thread_id;
+
 
     MoosObject* m_parent;
 
@@ -39,49 +43,6 @@ std::thread::id GraphicItem::s_main_thread_id = std::this_thread::get_id();
 
 
 DEFINE_NAMESPACE_MOOS_END
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-DEFINE_NAMESPACE_ZZ_END
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
