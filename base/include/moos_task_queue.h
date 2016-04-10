@@ -7,6 +7,9 @@
 
 
 #include "moos_defines.h"
+#include "moos_task.h"
+
+
 
 
 DEFINE_NAMESPACE_MOOS_BEGIN
@@ -56,7 +59,9 @@ private:
 
 
 
-#include "moos_task.h"
+
+
+
 
 typedef MoosQueue<MoosTaskBase*> MoosTaskQueue;
 

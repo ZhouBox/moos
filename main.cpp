@@ -6,6 +6,7 @@
 #include "moos_looper.h"
 #include "moos_signal.h"
 #include "moos_object.h"
+#include "moos_graphic_button.h"
 
 #include <stdlib.h>
 
@@ -106,6 +107,8 @@ int main(int argc, char *argv[])
 
 
 
+    Moos::MoosGraphicButton button;
+
 
 
 
@@ -139,6 +142,8 @@ int main(int argc, char *argv[])
 
 
     _looper->exec_once();
+
+    button.show();
 
     _looper->exec();
 

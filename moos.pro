@@ -3,7 +3,10 @@ CONFIG += console c++11
 CONFIG -= app_bundle
 CONFIG -= qt
 
-SOURCES += main.cpp
+SOURCES += main.cpp \
+    graphic/moos_graphic_button.cpp \
+    graphic/moos_graphic_item.cpp \
+    base/moos_looper.cpp
 
 
 
@@ -11,7 +14,8 @@ INCLUDEPATH += base/include \
                graphic/include
 
 
-LIBS += -pthread
+
+LIBS += -lpthread -lGL -lglut
 
 DEFINES += _GLIBCXX_USE_NANOSLEEP
 
@@ -24,4 +28,5 @@ HEADERS += \
     base/include/moos_task_policy.h \
     base/include/moos_task_queue.h \
     base/include/moos_thread.h \
-    graphic/include/moos_graphic_item.h
+    graphic/include/moos_graphic_item.h \
+    graphic/include/moos_graphic_button.h

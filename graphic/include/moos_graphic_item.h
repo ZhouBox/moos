@@ -13,14 +13,14 @@
 DEFINE_NAMESPACE_MOOS_BEGIN
 
 
-class GraphicItem : public MoosObject
+class MoosGraphicItem : public MoosObject
 {
 public:
 
     static std::thread::id s_main_thread_id;
 
 
-    GraphicItem(MoosObject* parent)
+    MoosGraphicItem(MoosObject* parent)
         : m_parent(parent)
     {
        assert(s_main_thread_id == std::this_thread::get_id());
@@ -36,7 +36,7 @@ private:
 
 };
 
-std::thread::id GraphicItem::s_main_thread_id = std::this_thread::get_id();
+
 
 
 
