@@ -1,17 +1,21 @@
 #ifndef MOOS_OBJECT_H
 #define MOOS_OBJECT_H
 
+
+
 #include "moos_defines.h"
 #include "moos_looper.h"
 
-DEFINE_NAMESPACE_ZZ_BEGIN
+
+DEFINE_NAMESPACE_MOOS_BEGIN
+
 
 
 class MoosObject
 {
 public:
     MoosObject()
-        : m_looper(Looper::currentLooper())
+        : m_looper(MoosLooper::currentLooper())
     {
 
     }
@@ -19,16 +23,19 @@ public:
 
     virtual ~MoosObject() {}
 
-    Looper* eventLooper()
+    MoosLooper* eventLooper()
     {
         return m_looper;
     }
 
+
 private:
-    Looper* m_looper;
+    MoosLooper* m_looper;
 };
 
 
-DEFINE_NAMESPACE_ZZ_END
+
+
+DEFINE_NAMESPACE_MOOS_END
 
 #endif // MOOS_OBJECT_H

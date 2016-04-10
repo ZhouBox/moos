@@ -10,7 +10,7 @@
 #include <stdlib.h>
 
 
-DEFINE_NAMESPACE_ZZ_BEGIN
+DEFINE_NAMESPACE_MOOS_BEGIN
 
 
 
@@ -26,10 +26,10 @@ struct Add : public MoosObject
 
 
 
-class InputEventThread : public Thread
+class InputEventThread : public MoosThread
 {
 public:
-    InputEventThread(Looper* looper_, Add* add_)
+    InputEventThread(MoosLooper* looper_, Add* add_)
         : m_looper(looper_)
     {
 //        s.connect(add_, &Add::add, CONNECT_SYNC);
@@ -42,12 +42,14 @@ public:
     {
         std::cout << "Input Event Thread id: " << std::this_thread::get_id() << std::endl;
 
+        Add a__;
+
         std::this_thread::sleep_for(std::chrono::milliseconds(rand() % 7 * 1000));
         if (rand() % 2 == 0) {
-            m_looper->enqueue(new CommonTask([](){ std::cout << "Common Task: " << std::this_thread::get_id() << "\n"; }));
+            m_looper->enqueue(new MoosCommonTask([](){ std::cout << "Common Task: " << std::this_thread::get_id() << "\n"; }));
         }
         else {
-            TaskBase* _task = new DelayTask([](){ std::cout << "Delay Task: " << std::this_thread::get_id() << "\n"; });
+            MoosTaskBase* _task = new MoosDelayTask([](){ std::cout << "Delay Task: " << std::this_thread::get_id() << "\n"; });
             _task->setTtl(rand() % 5 * 1000);
             m_looper->enqueue(_task);
         }
@@ -64,7 +66,7 @@ public:
 
 
 private:
-    Looper* m_looper;
+    MoosLooper* m_looper;
 //    Signal<int, int> s;
     MOOS_SIGNAL(int, int) s;
 
@@ -83,12 +85,15 @@ auto add(const int t1_, const int t2_) -> decltype(t1_ + t2_)
 
 void addfun(const std::thread::id& id_)
 {
-    Looper* _looper = Looper::getLooper(id_);
-    _looper->enqueue(new CommonTask([](){ std::cout << "add fun task id:" << std::this_thread::get_id() << std::endl; }));
+    auto* _looper = MoosLooper::getLooper(id_);
+    _looper->enqueue(new MoosCommonTask([](){ std::cout << "add fun task id:" << std::this_thread::get_id() << std::endl; }));
 }
 
 
-DEFINE_NAMESPACE_ZZ_END
+DEFINE_NAMESPACE_MOOS_END
+
+
+
 
 
 int main(int argc, char *argv[])
@@ -104,25 +109,24 @@ int main(int argc, char *argv[])
 
 
 
-
-    zz::CommonTask cTask_(zz::add, 1, 2);
+    Moos::MoosCommonTask cTask_(Moos::add, 1, 2);
 
     cTask_.run();
 
 
 
-    zz::Add _add;
+    Moos::Add _add;
 
 
 
-    zz::CommonTask c1Task_(std::bind(&zz::Add::add, &_add, 1, 2));
+    Moos::MoosCommonTask c1Task_(std::bind(&Moos::Add::add, &_add, 1, 2));
 
     c1Task_.run();
 
 
-    zz::Looper* _looper = zz::Looper::currentLooper();
+    Moos::MoosLooper* _looper = Moos::MoosLooper::currentLooper();
 
-    zz::InputEventThread iTh(_looper, &_add);
+    Moos::InputEventThread iTh(_looper, &_add);
 
 
     iTh.start();
@@ -131,7 +135,7 @@ int main(int argc, char *argv[])
 
 
 
-    _looper->enqueue(new zz::CommonTask(zz::addfun, iTh.getId()));
+    _looper->enqueue(new Moos::MoosCommonTask(Moos::addfun, iTh.getId()));
 
 
     _looper->exec_once();

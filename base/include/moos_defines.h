@@ -1,11 +1,11 @@
-#ifndef DEFINES_H
-#define DEFINES_H
+#ifndef MOOS_DEFINES_H
+#define MOOS_DEFINES_H
 
 #include <chrono>
 
-#define DEFINE_NAMESPACE_ZZ_BEGIN namespace zz {
+#define DEFINE_NAMESPACE_MOOS_BEGIN namespace Moos {
 
-#define DEFINE_NAMESPACE_ZZ_END }
+#define DEFINE_NAMESPACE_MOOS_END }
 
 #define UN_USE(X) (void(X))
 
@@ -23,7 +23,7 @@
 
 
 
-DEFINE_NAMESPACE_ZZ_BEGIN
+DEFINE_NAMESPACE_MOOS_BEGIN
 
 
 const int THREAD_TICK = 30;
@@ -31,22 +31,22 @@ const int THREAD_TICK = 30;
 
 typedef std::chrono::milliseconds ms;
 
-enum
+enum MOOS_TASK_TYPE
 {
     TASK_COMMON = 1 << 0,
     TASK_DELAY = 1 << 1,
 };
 
-enum CONNECT_TYPE
+enum MOOS_CONNECT_TYPE
 {
     CONNECT_SYNC,
     CONNECT_AYNC,
     CONNECT_AUTO
 };
 
-DEFINE_NAMESPACE_ZZ_END
+DEFINE_NAMESPACE_MOOS_END
 
 
 
 
-#endif // DEFINES_H
+#endif // MOOS_DEFINES_H

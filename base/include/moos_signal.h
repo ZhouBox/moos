@@ -10,7 +10,7 @@
 #include "moos_defines.h"
 #include "moos_looper.h"
 
-DEFINE_NAMESPACE_ZZ_BEGIN
+DEFINE_NAMESPACE_MOOS_BEGIN
 
 
 
@@ -21,7 +21,7 @@ struct __Impl_Slot_base
 {
     virtual ~__Impl_Slot_base() {}
     virtual void run(Args&& ... args_) = 0;
-    virtual CommonTask* convertTask(Args&& ... args_) = 0;
+    virtual MoosCommonTask* convertTask(Args&& ... args_) = 0;
 };
 
 template <typename _Class, typename _Callable, typename ... Args>
@@ -35,9 +35,9 @@ struct __Impl_Slot : public __Impl_Slot_base<Args...>
     }
 
 
-    CommonTask* convertTask(Args&& ... args_)
+    MoosCommonTask* convertTask(Args&& ... args_)
     {
-        return new CommonTask(std::bind(m_Mfun, m_object, std::forward<Args>(args_)...));
+        return new MoosCommonTask(std::bind(m_Mfun, m_object, std::forward<Args>(args_)...));
     }
 
     void run(Args&& ... args_)
@@ -55,7 +55,7 @@ struct Slot
 
 
     template <typename _Class, typename _Callable>
-    Slot(_Class* object_, const _Callable& fun_, CONNECT_TYPE type_)
+    Slot(_Class* object_, const _Callable& fun_, MOOS_CONNECT_TYPE type_)
         : m_type(type_)
     {
         static_assert(has_member_eventLooper<_Class>::value, "Class has not in a event looper!!!");
@@ -70,7 +70,7 @@ struct Slot
     }
 
 
-    CommonTask* convertTask(Args&& ... args_)
+    MoosCommonTask* convertTask(Args&& ... args_)
     {
         return m_m->convertTask(std::forward<Args>(args_)...);
     }
@@ -82,7 +82,7 @@ struct Slot
         return m_type;
     }
 
-    Looper* eventLooper()
+    MoosLooper* eventLooper()
     {
         return m_looper;
     }
@@ -91,8 +91,8 @@ struct Slot
 
 
     std::shared_ptr<__Impl_Slot_base<Args...>> m_m;
-    CONNECT_TYPE m_type;
-    Looper* m_looper;
+    MOOS_CONNECT_TYPE m_type;
+    MoosLooper* m_looper;
 
 
 };
@@ -103,17 +103,17 @@ struct Slot
 
 
 template <typename ... Args>
-class Signal
+class MoosSignal
 {
 
 public:
-    Signal()
+    MoosSignal()
     {
 
     }
 
     template <typename _Class, typename _Callable>
-    bool connect(_Class* object_, const _Callable& fun_, CONNECT_TYPE type_ = CONNECT_AUTO)
+    bool connect(_Class* object_, const _Callable& fun_, MOOS_CONNECT_TYPE type_ = CONNECT_AUTO)
     {
         auto ite = std::find_if(m_slots.begin(), m_slots.end(), FindHelper<_Class, _Callable>(object_, fun_));
         if (ite != m_slots.end()) {
@@ -141,7 +141,7 @@ public:
 
     void emit(Args&& ... args_)
     {
-        Looper* _cLooper = Looper::currentLooper();
+        auto* _cLooper = MoosLooper::currentLooper();
         assert(_cLooper != NULL);
         for(Slot<Args...>* t : m_slots)
         {
@@ -215,10 +215,10 @@ private:
 
 
 
-DEFINE_NAMESPACE_ZZ_END
+DEFINE_NAMESPACE_MOOS_END
 
 
-#define MOOS_SIGNAL(...) zz::Signal<__VA_ARGS__>
+#define MOOS_SIGNAL(...) Moos::MoosSignal<__VA_ARGS__>
 
 #define MOOS_CONNECT(Signal, ...) Signal.connect(__VA_ARGS__)
 

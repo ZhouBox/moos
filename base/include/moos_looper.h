@@ -1,5 +1,5 @@
-#ifndef LOOPER_H
-#define LOOPER_H
+#ifndef MOOS_LOOPER_H
+#define MOOS_LOOPER_H
 
 
 #include <map>
@@ -10,37 +10,28 @@
 #include "moos_task_queue.h"
 
 
-DEFINE_NAMESPACE_ZZ_BEGIN
+DEFINE_NAMESPACE_MOOS_BEGIN
 
 
-class Looper
+class MoosLooper
 {
 public:
 
 
-    static Looper* currentLooper()
+    static MoosLooper* currentLooper()
     {
-        auto _looper = m_loopers.find(std::this_thread::get_id());
-        Looper *_re = NULL;
-        if (_looper != m_loopers.end()) {
-            _re = (*_looper).second;
-        }
-        else {
-            _re = new Looper();
-            m_loopers[std::this_thread::get_id()] = _re;
-        }
-        return _re;
+        return getLooper(std::this_thread::get_id());
     }
 
-    static Looper* getLooper(const std::thread::id& id_)
+    static MoosLooper* getLooper(const std::thread::id& id_)
     {
         auto _looper = m_loopers.find(id_);
-        Looper *_re = NULL;
+        MoosLooper *_re = NULL;
         if (_looper != m_loopers.end()) {
             _re = (*_looper).second;
         }
         else {
-            _re = new Looper();
+            _re = new MoosLooper();
             m_loopers[id_] = _re;
         }
         return _re;
@@ -51,19 +42,19 @@ public:
 
 
 
-    void enqueue(TaskBase* t_)
+    void enqueue(MoosTaskBase* t_)
     {
         return m_queue.enqueue(t_);
     }
 
-    bool dequeue(TaskBase*& t_, int ms_ = -1)
+    bool dequeue(MoosTaskBase*& t_, int ms_ = -1)
     {
         return m_queue.dequeue(t_, ms_);
     }
 
     void exec_once(int ms_ = -1)
     {
-        TaskBase* _task = NULL;
+        MoosTaskBase* _task = NULL;
         do {
             if (m_queue.dequeue(_task, ms_)) {
                 if (_task->type() == TASK_COMMON) {
@@ -89,7 +80,7 @@ public:
     void exec(int ms_ = -1)
     {
         while(true) {
-            TaskBase* _task = NULL;
+            MoosTaskBase* _task = NULL;
             if (m_queue.dequeue(_task, ms_)) {
                 if (_task->type() == TASK_COMMON) {
                     _task->run();
@@ -112,18 +103,18 @@ public:
     }
 
 private:
-    Looper() {}
+    MoosLooper() {}
 
 
 
-    TaskQueue m_queue;
-    static std::map<std::thread::id, Looper*> m_loopers;
+    MoosTaskQueue m_queue;
+    static std::map<std::thread::id, MoosLooper*> m_loopers;
 
 };
 
-std::map<std::thread::id, Looper*> Looper::m_loopers = std::map<std::thread::id, Looper*>();
+std::map<std::thread::id, MoosLooper*> MoosLooper::m_loopers = std::map<std::thread::id, MoosLooper*>();
 
 
-DEFINE_NAMESPACE_ZZ_END
+DEFINE_NAMESPACE_MOOS_END
 
-#endif // LOOPER_H
+#endif // MOOS_LOOPER_H

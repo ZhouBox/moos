@@ -10,20 +10,20 @@
 #include "moos_looper.h"
 
 
-DEFINE_NAMESPACE_ZZ_BEGIN
+DEFINE_NAMESPACE_MOOS_BEGIN
 
 
-class Thread
+class MoosThread
 {
 public:
-    Thread()
+    MoosThread()
         : m_running(false)
     {
 
     }
 
 
-    virtual ~Thread()
+    virtual ~MoosThread()
     {
         if (m_running) {
             m_running = false;
@@ -37,7 +37,7 @@ public:
         }
         else {
             m_running = true;
-            m_threadHandler.reset(new std::thread(&Thread::_run, this));
+            m_threadHandler.reset(new std::thread(&MoosThread::_run, this));
             m_id = m_threadHandler->get_id();
             m_threadHandler->detach();
 
@@ -62,10 +62,10 @@ private:
 
     void _run()
     {
-        (void*)Looper::currentLooper();
+        (void*)MoosLooper::currentLooper();
         while(m_running && threadRun())
         {
-            Looper::currentLooper()->exec_once(THREAD_TICK);
+            MoosLooper::currentLooper()->exec_once(THREAD_TICK);
         }
     }
 
@@ -75,6 +75,6 @@ private:
 
 };
 
-DEFINE_NAMESPACE_ZZ_END
+DEFINE_NAMESPACE_MOOS_END
 
 #endif // MOOS_THREAD_H

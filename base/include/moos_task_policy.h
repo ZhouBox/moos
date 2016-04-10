@@ -1,17 +1,17 @@
-#ifndef TASK_POLICY_H
-#define TASK_POLICY_H
+#ifndef MOOS_TASK_POLICY_H
+#define MOOS_TASK_POLICY_H
 
 #include "moos_defines.h"
 
 
 
 
-DEFINE_NAMESPACE_ZZ_BEGIN
+DEFINE_NAMESPACE_MOOS_BEGIN
 
-struct TaskPolicy
+struct MoosTaskPolicy
 {
 
-    virtual ~TaskPolicy() {}
+    virtual ~MoosTaskPolicy() {}
     virtual ms ttl() const
     {
         return ms(0);
@@ -30,7 +30,7 @@ struct TaskPolicy
 
 
 
-class CommonTaskPolicy : public TaskPolicy
+class MoosCommonTaskPolicy : public MoosTaskPolicy
 {
 public:
     int type() const
@@ -45,11 +45,11 @@ public:
 
 
 
-class DelayTaskPolicy : public TaskPolicy
+class MoosDelayTaskPolicy : public MoosTaskPolicy
 {
 public:
 
-    DelayTaskPolicy()
+    MoosDelayTaskPolicy()
         : m_delay(std::chrono::system_clock::now())
     {
 
@@ -87,6 +87,6 @@ private:
 };
 
 
-DEFINE_NAMESPACE_ZZ_END
+DEFINE_NAMESPACE_MOOS_END
 
-#endif // TASK_POLICY_H
+#endif // MOOS_TASK_POLICY_H

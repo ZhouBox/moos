@@ -1,5 +1,5 @@
-#ifndef TASK_QUEUE_H
-#define TASK_QUEUE_H
+#ifndef MOOS_TASK_QUEUE_H
+#define MOOS_TASK_QUEUE_H
 
 #include <list>
 #include <condition_variable>
@@ -9,11 +9,11 @@
 #include "moos_defines.h"
 
 
-DEFINE_NAMESPACE_ZZ_BEGIN
+DEFINE_NAMESPACE_MOOS_BEGIN
 
 
 template <typename T>
-class Queue
+class MoosQueue
 {
 public:
 
@@ -58,7 +58,7 @@ private:
 
 #include "moos_task.h"
 
-typedef Queue<TaskBase*> TaskQueue;
+typedef MoosQueue<MoosTaskBase*> MoosTaskQueue;
 
 
 
@@ -66,6 +66,6 @@ typedef Queue<TaskBase*> TaskQueue;
 
 
 
-DEFINE_NAMESPACE_ZZ_END
+DEFINE_NAMESPACE_MOOS_END
 
-#endif // TASK_QUEUE_H
+#endif // MOOS_TASK_QUEUE_H

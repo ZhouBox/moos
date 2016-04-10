@@ -1,5 +1,5 @@
-#ifndef TASK_H
-#define TASK_H
+#ifndef MOOS_TASK_H
+#define MOOS_TASK_H
 
 #include <memory>
 
@@ -7,15 +7,15 @@
 #include "moos_task_policy.h"
 
 
-DEFINE_NAMESPACE_ZZ_BEGIN
+DEFINE_NAMESPACE_MOOS_BEGIN
 
 
 
 
 
-struct TaskBase
+struct MoosTaskBase
 {
-    virtual ~TaskBase() {}
+    virtual ~MoosTaskBase() {}
     virtual void run() = 0;
     virtual int ttl() const = 0;
     virtual int type() const = 0;
@@ -25,7 +25,7 @@ struct TaskBase
 
 
 template <typename _Policy>
-class Task : public TaskBase
+class MoosTask : public MoosTaskBase
 {
     struct __Impl_base;
     typedef std::shared_ptr<__Impl_base> __share_base_type;
@@ -56,7 +56,7 @@ class Task : public TaskBase
 
 public:
     template <typename _Callable, typename ... Args>
-    Task(_Callable&& f_, Args&& ... args)
+    MoosTask(_Callable&& f_, Args&& ... args)
     {
         m_Mfun = _make_routine(std::bind(std::forward<_Callable>(f_), std::forward<Args>(args)...));
     }
@@ -101,12 +101,12 @@ private:
 };
 
 
-typedef Task<CommonTaskPolicy> CommonTask;
-typedef Task<DelayTaskPolicy> DelayTask;
+typedef MoosTask<MoosCommonTaskPolicy> MoosCommonTask;
+typedef MoosTask<MoosDelayTaskPolicy> MoosDelayTask;
 
 
-DEFINE_NAMESPACE_ZZ_END
+DEFINE_NAMESPACE_MOOS_END
 
 
 
-#endif // TASK_H
+#endif // MOOS_TASK_H
