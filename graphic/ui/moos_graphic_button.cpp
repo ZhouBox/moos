@@ -10,8 +10,6 @@ DEFINE_NAMESPACE_MOOS_BEGIN
 
 void MoosGraphicButton::paint()
 {
-    int i = 0;
-    glutInit(&i, NULL);
     glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
     glutInitWindowPosition(50, 25);
     glutInitWindowSize(100, 50);
@@ -24,12 +22,12 @@ void MoosGraphicButton::paint()
 
 void MoosGraphicButton::show()
 {
-    MoosLooper::currentLooper()->enqueue(new MoosCommonTask(std::bind(&MoosGraphicButton::paint, this)));
+    m_looper->enqueue(new MoosCommonTask(std::bind(&MoosGraphicButton::paint, this)));
 }
 
 void MoosGraphicButton::repaint()
 {
-    MoosLooper::currentLooper()->enqueue(new MoosCommonTask(std::bind(&MoosGraphicButton::paint, this)));
+    m_looper->enqueue(new MoosCommonTask(std::bind(&MoosGraphicButton::paint, this)));
 }
 
 

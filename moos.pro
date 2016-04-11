@@ -4,14 +4,16 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += main.cpp \
-    graphic/moos_graphic_button.cpp \
-    graphic/moos_graphic_item.cpp \
-    base/moos_looper.cpp
+    graphic/ui/moos_graphic_button.cpp \
+    graphic/ui/moos_graphic_item.cpp \
+    base/core/moos_looper.cpp \
+    base/appframework/moos_application.cpp
 
 
 
-INCLUDEPATH += base/include \
-               graphic/include
+INCLUDEPATH += base/core/include \
+               graphic/ui/include \
+               base/appframework/include
 
 
 
@@ -20,13 +22,14 @@ LIBS += -lpthread -lGL -lglut
 DEFINES += _GLIBCXX_USE_NANOSLEEP
 
 HEADERS += \
-    base/include/moos_defines.h \
-    base/include/moos_looper.h \
-    base/include/moos_object.h \
-    base/include/moos_signal.h \
-    base/include/moos_task.h \
-    base/include/moos_task_policy.h \
-    base/include/moos_task_queue.h \
-    base/include/moos_thread.h \
-    graphic/include/moos_graphic_item.h \
-    graphic/include/moos_graphic_button.h
+    graphic/ui/include/moos_graphic_button.h \
+    graphic/ui/include/moos_graphic_item.h \
+    base/core/include/moos_defines.h \
+    base/core/include/moos_looper.h \
+    base/core/include/moos_object.h \
+    base/core/include/moos_signal.h \
+    base/core/include/moos_task.h \
+    base/core/include/moos_task_policy.h \
+    base/core/include/moos_task_queue.h \
+    base/core/include/moos_thread.h \
+    base/appframework/include/moos_application.h

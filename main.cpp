@@ -1,6 +1,8 @@
 #include <iostream>
 
 
+#include "moos_application.h"
+
 #include "moos_task.h"
 #include "moos_thread.h"
 #include "moos_looper.h"
@@ -33,7 +35,7 @@ public:
     InputEventThread(MoosLooper* looper_, Add* add_)
         : m_looper(looper_)
     {
-//        s.connect(add_, &Add::add, CONNECT_SYNC);
+        //        s.connect(add_, &Add::add, CONNECT_SYNC);
         MOOS_CONNECT(s, add_, &Add::add);
         _t = add_;
 
@@ -55,11 +57,11 @@ public:
             m_looper->enqueue(_task);
         }
 
-//        s.emit(rand(), rand());
+        //        s.emit(rand(), rand());
         MOOS_EMIT(s, rand() % 100, rand() % 100);
 
-//        s.disconnect(_t, &Add::add);
-//        MOOS_DISCONNECT(s, _t, &Add::add);
+        //        s.disconnect(_t, &Add::add);
+        //        MOOS_DISCONNECT(s, _t, &Add::add);
 
 
         return true;
@@ -68,7 +70,7 @@ public:
 
 private:
     MoosLooper* m_looper;
-//    Signal<int, int> s;
+    //    Signal<int, int> s;
     MOOS_SIGNAL(int, int) s;
 
     Add* _t;
@@ -91,26 +93,11 @@ void addfun(const std::thread::id& id_)
 }
 
 
-DEFINE_NAMESPACE_MOOS_END
-
-
-
-
-
-int main(int argc, char *argv[])
+void testBase(int argc, char *argv[])
 {
 
     UN_USE(argc);
     UN_USE(argv);
-
-
-
-
-
-    Moos::MoosGraphicButton button;
-
-
-
 
     Moos::MoosCommonTask cTask_(Moos::add, 1, 2);
 
@@ -143,11 +130,32 @@ int main(int argc, char *argv[])
 
     _looper->exec_once();
 
+}
+
+void testGraphic(int argc, char *argv[])
+{
+    Moos::MoosApplication app(argc, argv);
+
+    Moos::MoosGraphicButton button;
     button.show();
 
-    _looper->exec();
+    app.exec();
+
+}
 
 
+DEFINE_NAMESPACE_MOOS_END
+
+
+
+
+
+int main(int argc, char *argv[])
+{
+
+
+
+    Moos::testGraphic(argc, argv);
 
     return 0;
 }

@@ -21,7 +21,7 @@ public:
 
 
     MoosGraphicItem(MoosObject* parent)
-        : m_parent(parent)
+        : MoosObject(parent)
     {
        assert(s_main_thread_id == std::this_thread::get_id());
     }
@@ -31,8 +31,6 @@ public:
 private:
 
 
-
-    MoosObject* m_parent;
 
 };
 
