@@ -11,6 +11,7 @@ MoosApplication::MoosApplication(int argc, char *argv[])
 {
     int _t = argc;
     glutInit(&_t, argv);
+    glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
 }
 
 

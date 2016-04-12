@@ -7,7 +7,9 @@ SOURCES += main.cpp \
     graphic/ui/moos_graphic_button.cpp \
     graphic/ui/moos_graphic_item.cpp \
     base/core/moos_looper.cpp \
-    base/appframework/moos_application.cpp
+    base/appframework/moos_application.cpp \
+    graphic/ui/moos_point.cpp \
+    graphic/ui/moos_size.cpp
 
 
 
@@ -32,4 +34,6 @@ HEADERS += \
     base/core/include/moos_task_policy.h \
     base/core/include/moos_task_queue.h \
     base/core/include/moos_thread.h \
-    base/appframework/include/moos_application.h
+    base/appframework/include/moos_application.h \
+    graphic/ui/include/moos_point.h \
+    graphic/ui/include/moos_size.h

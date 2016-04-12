@@ -7,15 +7,28 @@
 DEFINE_NAMESPACE_MOOS_BEGIN
 
 
+MoosGraphicButton::MoosGraphicButton(MoosGraphicItem* parent)
+    : MoosGraphicItem(parent)
+{
+    m_size = MoosSize(120, 45);
+}
+
 
 void MoosGraphicButton::paint()
 {
-    glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
-    glutInitWindowPosition(50, 25);
-    glutInitWindowSize(100, 50);
-    glutCreateWindow("Moos Button");
+    if (!m_parentItem) {
+        glutInitWindowPosition(m_point.x(), m_point.y());
+        glutInitWindowSize(m_size.width(), m_size.height());
+        glutCreateWindow("Moos Button");
+    }
+    else {
+        m_WindId = glutCreateSubWindow(m_parentItem->windowId(), m_point.x(), m_point.y(),
+                                       m_size.width(), m_size.height());
+    }
     glClearColor(0.0, 1.0, 0.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT);
+    glColor3f(1.0f, 0.0f, 0.0f);
+    glRectf(0.0f, 0.0f, m_size.height(), m_size.width());
     glFlush();
 }
 

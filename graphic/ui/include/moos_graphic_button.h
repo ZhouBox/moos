@@ -11,11 +11,7 @@ DEFINE_NAMESPACE_MOOS_BEGIN
 class MoosGraphicButton : public MoosGraphicItem
 {
 public:
-    MoosGraphicButton(MoosObject* parent = NULL)
-        : MoosGraphicItem(parent)
-    {
-
-    }
+    MoosGraphicButton(MoosGraphicItem* parent = NULL);
 
     void paint();
 
