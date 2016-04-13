@@ -1,10 +1,12 @@
 #include "moos_graphic_button.h"
 #include "moos_looper.h"
+#include "moos_log.h"
 
 #include <GL/glut.h>
 
 
 DEFINE_NAMESPACE_MOOS_BEGIN
+
 
 
 MoosGraphicButton::MoosGraphicButton(MoosGraphicItem* parent)
@@ -28,7 +30,8 @@ void MoosGraphicButton::paint()
     glClearColor(0.0, 1.0, 0.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT);
     glColor3f(1.0f, 0.0f, 0.0f);
-    glRectf(0.0f, 0.0f, m_size.height(), m_size.width());
+    glRecti(m_point.x(), m_point.y(), m_point.x() + m_size.width(), m_point.y() + m_size.height());
+    MOOS_DEBUG_LOG(m_point.x(), m_point.y(), m_point.x() + m_size.width(), m_point.y() + m_size.height());
     glFlush();
 }
 
