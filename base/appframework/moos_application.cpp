@@ -23,8 +23,7 @@ MoosApplication::~MoosApplication()
 
 int MoosApplication::exec()
 {
-    m_looper->exec();
-    return 0;
+    return m_looper->exec();
 }
 
 void MoosApplication::init(int argc, char* argv[])

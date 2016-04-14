@@ -79,9 +79,10 @@ public:
     }
 
 
-    void exec(int ms_ = -1)
+    int exec(int ms_ = -1)
     {
-        while(true) {
+        int _re = 1;
+        while(m_isRunning) {
             MoosTaskBase* _task = NULL;
             if (m_queue.dequeue(_task, ms_)) {
                 if (_task->type() == TASK_COMMON) {
@@ -102,15 +103,28 @@ public:
                 }
             }
         }
+
+        return _re;
+
+    }
+
+    void exit()
+    {
+        m_isRunning = false;
     }
 
 private:
-    MoosLooper() {}
+    MoosLooper()
+        : m_isRunning(true)
+    {
+
+    }
 
 
 
     MoosTaskQueue m_queue;
     static std::map<std::thread::id, MoosLooper*> m_loopers;
+    bool m_isRunning;
 
 };
 
