@@ -31,6 +31,8 @@ public:
             _re = (*_looper).second;
         }
         else {
+            std::mutex _mutex;
+            std::unique_lock<std::mutex> _lock(_mutex);
             _re = new MoosLooper();
             m_loopers[id_] = _re;
         }
