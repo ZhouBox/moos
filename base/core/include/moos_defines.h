@@ -10,6 +10,12 @@
 #define UN_USE(X) (void(X))
 
 
+#define NO_CPOY_ASSIGN(CLASS) \
+    CLASS(const CLASS&); \
+    CLASS& operator=(const CLASS&) \
+
+
+
 
 #define HAS_MEMBER(member)\
     template<typename T, typename... Args>struct has_member_##member\

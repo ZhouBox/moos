@@ -13,7 +13,7 @@ DEFINE_NAMESPACE_MOOS_BEGIN
 
 
 template <typename T>
-typename std::decay<T> unpack(const T& t)
+inline typename std::decay<T> unpack(const T& t)
 {
     std::cout << t << ' ';
     typename std::decay<T> _ins;
@@ -21,7 +21,7 @@ typename std::decay<T> unpack(const T& t)
 }
 
 template <typename T, typename ... Args>
-void debugLogImpl(const T& t, const Args& ... args)
+inline void debugLogImpl(const T& t, const Args& ... args)
 {
     std::cout << t << ' ';
     auto _fun = [](...) {};
