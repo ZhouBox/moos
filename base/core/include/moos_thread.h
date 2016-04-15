@@ -13,6 +13,8 @@
 DEFINE_NAMESPACE_MOOS_BEGIN
 
 
+const int THREAD_TICK = 30;
+
 class MoosThread
 {
 public:

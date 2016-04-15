@@ -1,0 +1,20 @@
+#ifndef MOOS_TASKTYPE_H
+#define MOOS_TASKTYPE_H
+
+#include "moos_defines.h"
+
+
+DEFINE_NAMESPACE_MOOS_BEGIN
+
+
+
+enum MOOS_TASK_TYPE
+{
+    TASK_COMMON = 1 << 0,
+    TASK_DELAY = 1 << 1,
+};
+
+
+DEFINE_NAMESPACE_MOOS_END
+
+#endif // MOOS_TASKTYPE_H

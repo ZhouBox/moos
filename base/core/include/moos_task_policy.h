@@ -3,10 +3,14 @@
 
 #include "moos_defines.h"
 
+#include "moos_tasktype.h"
+
 
 
 
 DEFINE_NAMESPACE_MOOS_BEGIN
+
+typedef std::chrono::milliseconds ms;
 
 struct MoosTaskPolicy
 {

@@ -42,4 +42,5 @@ HEADERS += \
     graphic/engine/include/moos_paintengine.h \
     graphic/engine/include/moos_painter.h \
     graphic/engine/include/moos_paintdevice.h \
-    base/core/include/moos_logger.h
+    base/core/include/moos_logger.h \
+    base/core/include/moos_tasktype.h

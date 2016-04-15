@@ -32,23 +32,14 @@
 DEFINE_NAMESPACE_MOOS_BEGIN
 
 
-const int THREAD_TICK = 30;
 
 
-typedef std::chrono::milliseconds ms;
 
-enum MOOS_TASK_TYPE
-{
-    TASK_COMMON = 1 << 0,
-    TASK_DELAY = 1 << 1,
-};
 
-enum MOOS_CONNECT_TYPE
-{
-    CONNECT_SYNC,
-    CONNECT_AYNC,
-    CONNECT_AUTO
-};
+
+
+
+
 
 DEFINE_NAMESPACE_MOOS_END
 

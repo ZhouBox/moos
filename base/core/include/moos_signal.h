@@ -14,6 +14,15 @@ DEFINE_NAMESPACE_MOOS_BEGIN
 
 
 
+
+enum MOOS_CONNECT_TYPE
+{
+    CONNECT_SYNC,
+    CONNECT_AYNC,
+    CONNECT_AUTO
+};
+
+
 HAS_MEMBER(eventLooper);
 
 template <typename ... Args>
