@@ -1,5 +1,5 @@
-#ifndef MOOS_LOG_H
-#define MOOS_LOG_H
+#ifndef MOOS_LOGGER_H
+#define MOOS_LOGGER_H
 
 
 #include "moos_defines.h"
@@ -111,4 +111,4 @@ DEFINE_NAMESPACE_MOOS_END
 
 #define MOOS_DEBUG_LOG(...) Moos::debugLog("filename:", __FILE__, " line:", __LINE__, " ", __VA_ARGS__)
 
-#endif // MOOS_LOG_H
+#endif // MOOS_LOGGER_H

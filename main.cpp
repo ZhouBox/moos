@@ -9,6 +9,7 @@
 #include "moos_signal.h"
 #include "moos_object.h"
 #include "moos_graphic_button.h"
+#include "moos_logger.h"
 
 #include <stdlib.h>
 
@@ -147,12 +148,13 @@ void testGraphic(int argc, char *argv[])
 DEFINE_NAMESPACE_MOOS_END
 
 
+#include <fstream>
+
 
 
 
 int main(int argc, char *argv[])
 {
-
 
 
     Moos::testGraphic(argc, argv);

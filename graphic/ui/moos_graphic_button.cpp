@@ -1,6 +1,6 @@
 #include "moos_graphic_button.h"
 #include "moos_looper.h"
-#include "moos_log.h"
+#include "moos_logger.h"
 
 #include <GL/glut.h>
 

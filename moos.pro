@@ -39,6 +39,7 @@ HEADERS += \
     base/appframework/include/moos_application.h \
     graphic/ui/include/moos_point.h \
     graphic/ui/include/moos_size.h \
-    base/core/include/moos_log.h \
     graphic/engine/include/moos_paintengine.h \
-    graphic/engine/include/moos_painter.h
+    graphic/engine/include/moos_painter.h \
+    graphic/engine/include/moos_paintdevice.h \
+    base/core/include/moos_logger.h
