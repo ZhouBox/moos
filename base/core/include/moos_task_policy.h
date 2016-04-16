@@ -25,7 +25,7 @@ struct MoosTaskPolicy
 
     virtual void setTtl(ms ms_)
     {
-        UN_USE(ms_);
+        MOOS_UNUSE(ms_);
     }
 
 

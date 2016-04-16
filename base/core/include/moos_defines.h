@@ -7,7 +7,7 @@
 
 #define DEFINE_NAMESPACE_MOOS_END }
 
-#define UN_USE(X) (void(X))
+#define MOOS_UNUSE(X) (void(X))
 
 
 #define NO_CPOY_ASSIGN(CLASS) \

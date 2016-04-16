@@ -10,14 +10,16 @@ SOURCES += main.cpp \
     base/appframework/moos_application.cpp \
     graphic/ui/moos_point.cpp \
     graphic/ui/moos_size.cpp \
-    graphic/engine/moos_paintengine.cpp
+    graphic/engine/moos_paintengine.cpp \
+    input/moos_eventhub.cpp
 
 
 
 INCLUDEPATH += base/core/include \
                graphic/ui/include \
                base/appframework/include \
-               graphic/engine/include
+               graphic/engine/include \
+               input/include
 
 
 
@@ -43,4 +45,5 @@ HEADERS += \
     graphic/engine/include/moos_painter.h \
     graphic/engine/include/moos_paintdevice.h \
     base/core/include/moos_logger.h \
-    base/core/include/moos_tasktype.h
+    base/core/include/moos_tasktype.h \
+    input/include/moos_eventhub.h

@@ -97,8 +97,8 @@ void addfun(const std::thread::id& id_)
 void testBase(int argc, char *argv[])
 {
 
-    UN_USE(argc);
-    UN_USE(argv);
+    MOOS_UNUSE(argc);
+    MOOS_UNUSE(argv);
 
     Moos::MoosCommonTask cTask_(Moos::add, 1, 2);
 
