@@ -3,6 +3,9 @@
 
 #include <chrono>
 #include <vector>
+#include <string>
+
+#include <sys/epoll.h>
 
 
 
@@ -24,6 +27,30 @@ enum
 {
     MOOSINPUT_DEVICE_CLASS_KEYBOARD = 1 << 0,
     MOOSINPUT_DEVICE_CLASS_MOUSE = 1 << 1
+};
+
+class MoosDevice
+{
+public:
+    MoosDevice(std::string&& deviceName_, int fileId_);
+
+    ~MoosDevice();
+
+    const std::string& name() const
+    {
+        return m_deviceName;
+    }
+
+    int id() const
+    {
+        return m_fileId;
+    }
+
+    void close();
+private:
+    std::string m_deviceName;
+    int m_fileId;
+
 };
 
 class MoosEventHub
@@ -49,6 +76,11 @@ private:
     int m_notifyId;
 
     static const int s_epoll_notify_id = 0x0506;
+
+    static const int s_epoll_max_events = 20;
+
+    epoll_event m_epollEvents[s_epoll_max_events];
+
 
 
 
