@@ -18,7 +18,7 @@ DEFINE_NAMESPACE_MOOS_BEGIN
 enum MOOS_CONNECT_TYPE
 {
     CONNECT_SYNC,
-    CONNECT_AYNC,
+    CONNECT_ASYNC,
     CONNECT_AUTO
 };
 
@@ -121,6 +121,13 @@ public:
 
     }
 
+    ~MoosSignal()
+    {
+        for(Slot<Args...>* t : m_slots) {
+            delete t;
+        }
+    }
+
     template <typename _Class, typename _Callable>
     bool connect(_Class* object_, const _Callable& fun_, MOOS_CONNECT_TYPE type_ = CONNECT_AUTO)
     {
@@ -164,7 +171,7 @@ public:
                 }
                 break;
 
-            case CONNECT_AYNC:
+            case CONNECT_ASYNC:
                 assert(t->eventLooper() != NULL);
                 t->eventLooper()->enqueue(t->convertTask(std::forward<Args>(args_)...));
                 break;
