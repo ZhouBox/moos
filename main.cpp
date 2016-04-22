@@ -38,6 +38,7 @@ public:
     {
         //        s.connect(add_, &Add::add, CONNECT_SYNC);
         MOOS_CONNECT(s, add_, &Add::add);
+        MOOS_CONNECT(s, add_, &Add::add);
         _t = add_;
 
     }
@@ -94,6 +95,8 @@ void addfun(const std::thread::id& id_)
 }
 
 
+
+
 void testBase(int argc, char *argv[])
 {
 
@@ -105,8 +108,8 @@ void testBase(int argc, char *argv[])
     cTask_.run();
 
 
-
     Moos::Add _add;
+
 
 
 
@@ -128,8 +131,7 @@ void testBase(int argc, char *argv[])
 
     _looper->enqueue(new Moos::MoosCommonTask(Moos::addfun, iTh.getId()));
 
-
-    _looper->exec_once();
+   _looper->exec();
 
 }
 
@@ -156,7 +158,7 @@ DEFINE_NAMESPACE_MOOS_END
 int main(int argc, char *argv[])
 {
 
-
+//    Moos::testBase(argc, argv);
     Moos::testGraphic(argc, argv);
 
     return 0;

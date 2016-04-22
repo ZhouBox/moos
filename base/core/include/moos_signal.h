@@ -43,6 +43,8 @@ struct __Impl_Slot : public __Impl_Slot_base<Args...>
 
     }
 
+    ~__Impl_Slot() {}
+
 
     MoosCommonTask* convertTask(Args&& ... args_)
     {
