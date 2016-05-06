@@ -10,6 +10,7 @@
 #include "moos_object.h"
 #include "moos_graphic_button.h"
 #include "moos_logger.h"
+#include "moos_eventhub.h"
 
 #include <stdlib.h>
 
@@ -146,6 +147,13 @@ void testGraphic(int argc, char *argv[])
 
 }
 
+void testEventHub(int argc, char* argv[])
+{
+    MoosEventHub hub;
+    MoosRawEvent arr[10];
+    hub.getEvents(arr, 10);
+}
+
 
 DEFINE_NAMESPACE_MOOS_END
 
@@ -159,7 +167,10 @@ int main(int argc, char *argv[])
 {
 
 //    Moos::testBase(argc, argv);
-    Moos::testGraphic(argc, argv);
+
+//    Moos::testGraphic(argc, argv);
+
+    Moos::testEventHub(argc, argv);
 
     return 0;
 }

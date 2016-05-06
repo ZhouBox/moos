@@ -4,6 +4,7 @@
 
 #include <map>
 #include <thread>
+#include <atomic>
 
 #include "moos_defines.h"
 
@@ -124,7 +125,7 @@ private:
 
     MoosTaskQueue m_queue;
     static std::map<std::thread::id, MoosLooper*> m_loopers;
-    bool m_isRunning;
+    std::atomic_bool m_isRunning;
 
 };
 

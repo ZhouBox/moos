@@ -4,6 +4,7 @@
 #include <chrono>
 #include <vector>
 #include <string>
+#include <list>
 
 #include <sys/epoll.h>
 
@@ -71,6 +72,14 @@ public:
     size_t getEvents(MoosRawEvent* rawEvents_, size_t eventsSize_, int32_t timeOut_ = -1);
 
 
+
+private:
+    void onInotify();
+    void scanDevices();
+    void openDevice(const char* deviceName_);
+    void removeDevice(const char* deviceName_);
+
+
 private:
     int m_epollId;
     int m_notifyId;
@@ -80,6 +89,8 @@ private:
     static const int s_epoll_max_events = 20;
 
     epoll_event m_epollEvents[s_epoll_max_events];
+
+    std::list<MoosDevice*> m_devices;
 
 
 
