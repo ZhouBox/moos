@@ -151,7 +151,8 @@ void testEventHub(int argc, char* argv[])
 {
     MoosEventHub hub;
     MoosRawEvent arr[10];
-    hub.getEvents(arr, 10);
+    hub.scanDevices();
+//    hub.getEvents(arr, 10);
 }
 
 

@@ -32,7 +32,9 @@ enum
 
 class MoosDevice
 {
+    friend class MoosEventHub;
 public:
+    MoosDevice();
     MoosDevice(std::string&& deviceName_, int fileId_);
 
     ~MoosDevice();
@@ -47,10 +49,46 @@ public:
         return m_fileId;
     }
 
+    void setName(const std::string& name_)
+    {
+        m_deviceName = name_;
+    }
+
+    void setUniqueId(const std::string& uniqueId_)
+    {
+        m_uniqueId = uniqueId_;
+    }
+
+
+
+
+
     void close();
+    int deviceId() const
+    {
+        return m_deviceId;
+    }
+
+    void setDeviceId(int deviceId_)
+    {
+        m_deviceId = deviceId_;
+    }
+
+
+    MOOS_NO_CPOY_ASSIGN(MoosDevice);
+
 private:
     std::string m_deviceName;
+    std::string m_devicePath;
+    std::string m_uniqueId;
     int m_fileId;
+    uint16_t m_bus;
+    uint16_t m_vendor;
+    uint16_t m_product;
+    uint16_t m_version;
+    int m_driverVersion;
+    static int s_deviceId;
+    int m_deviceId;
 
 };
 
@@ -71,14 +109,13 @@ public:
 
     size_t getEvents(MoosRawEvent* rawEvents_, size_t eventsSize_, int32_t timeOut_ = -1);
 
-
+    void scanDevices();
 
 private:
     void onInotify();
-    void scanDevices();
-    void openDevice(const char* deviceName_);
-    void removeDevice(const char* deviceName_);
 
+    void openDevice(const char* devicePath_);
+    void removeDevice(const char* devicePath_);
 
 private:
     int m_epollId;

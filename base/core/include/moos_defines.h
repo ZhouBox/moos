@@ -10,7 +10,7 @@
 #define MOOS_UNUSE(X) (void(X))
 
 
-#define NO_CPOY_ASSIGN(CLASS) \
+#define MOOS_NO_CPOY_ASSIGN(CLASS) \
     CLASS(const CLASS&); \
     CLASS& operator=(const CLASS&) \
 
