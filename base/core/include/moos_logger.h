@@ -13,9 +13,9 @@ DEFINE_NAMESPACE_MOOS_BEGIN
 
 
 template <typename T>
-void unpack(const T& t)
+void unpack(T&& t)
 {
-    std::cout << t << ' ';
+    std::cout << std::forward<T>(t) << ' ';
 }
 
 template <typename ... Args>
