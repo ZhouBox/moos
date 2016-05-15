@@ -97,6 +97,8 @@ void MoosEventHub::scanDevices()
         }
     }
 
+    closedir(_dir);
+
 
 
 }
