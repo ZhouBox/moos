@@ -126,6 +126,7 @@ void MoosEventHub::openDevice(const char *devicePath_)
         for (MoosDevice* _t : m_devices) {
             if (_t->m_deviceName == _device->m_deviceName) {
                 MOOS_DEBUG_LOG("ignore ", devicePath_, _device->m_deviceName);
+                delete _device;
                 close(_fd);
                 return;
             }
@@ -135,6 +136,7 @@ void MoosEventHub::openDevice(const char *devicePath_)
         if (ioctl(_fd, EVIOCGVERSION, &_driverVarsion)) {
             MOOS_DEBUG_LOG("no get driver version for ", devicePath_, strerror(errno));
             close(_fd);
+            delete _device;
             return;
         }
 
@@ -145,6 +147,7 @@ void MoosEventHub::openDevice(const char *devicePath_)
         if (ioctl(_fd, EVIOCGID, &_inputid)) {
             MOOS_DEBUG_LOG("no get input_id for ", devicePath_, strerror(errno));
             close(_fd);
+            delete _device;
             return;
 
         }
@@ -165,6 +168,7 @@ void MoosEventHub::openDevice(const char *devicePath_)
         if (fcntl(_fd, F_SETFL, O_NONBLOCK)) {
             MOOS_DEBUG_LOG("set fd no block fail!!");
             close(_fd);
+            delete _device;
             return;
         }
 
