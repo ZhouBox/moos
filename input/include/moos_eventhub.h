@@ -35,13 +35,13 @@ class MoosDevice
     friend class MoosEventHub;
 public:
     MoosDevice();
-    MoosDevice(std::string&& deviceName_, int fileId_);
+
 
     ~MoosDevice();
 
     const std::string& name() const
     {
-        return m_deviceName;
+        return m_info.m_deviceName;
     }
 
     int id() const
@@ -49,15 +49,8 @@ public:
         return m_fileId;
     }
 
-    void setName(const std::string& name_)
-    {
-        m_deviceName = name_;
-    }
 
-    void setUniqueId(const std::string& uniqueId_)
-    {
-        m_uniqueId = uniqueId_;
-    }
+
 
 
 
@@ -74,21 +67,26 @@ public:
         m_deviceId = deviceId_;
     }
 
+    struct MoosDeviceInfo
+    {
+        std::string m_deviceName;
+        std::string m_uniqueId;
+        uint16_t m_bus;
+        uint16_t m_vendor;
+        uint16_t m_product;
+        uint16_t m_version;
+        int m_driverVersion;
+    };
+
 
     MOOS_NO_CPOY_ASSIGN(MoosDevice);
 
 private:
-    std::string m_deviceName;
     std::string m_devicePath;
-    std::string m_uniqueId;
     int m_fileId;
-    uint16_t m_bus;
-    uint16_t m_vendor;
-    uint16_t m_product;
-    uint16_t m_version;
-    int m_driverVersion;
     static int s_deviceId;
     int m_deviceId;
+    MoosDeviceInfo m_info;
 
 };
 

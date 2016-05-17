@@ -113,20 +113,19 @@ void MoosEventHub::openDevice(const char *devicePath_)
         MOOS_DEBUG_LOG("open device fail!! : ", strerror(errno));
     }
     else {
-        MoosDevice *_device = new MoosDevice();
+        MoosDevice::MoosDeviceInfo _deviceInfo;
         if (ioctl(_fd, EVIOCGNAME(sizeof(buffer) - 1), &buffer) < 1) {
 
         }
         else {
             buffer[sizeof(buffer) - 1] = '\0';
-            _device->setName(buffer);
+            _deviceInfo.m_deviceName = buffer;
         }
 
 
         for (MoosDevice* _t : m_devices) {
-            if (_t->m_deviceName == _device->m_deviceName) {
-                MOOS_DEBUG_LOG("ignore ", devicePath_, _device->m_deviceName);
-                delete _device;
+            if (_t->name() == _deviceInfo.m_deviceName) {
+                MOOS_DEBUG_LOG("ignore ", devicePath_, _deviceInfo.m_deviceName);
                 close(_fd);
                 return;
             }
@@ -136,42 +135,41 @@ void MoosEventHub::openDevice(const char *devicePath_)
         if (ioctl(_fd, EVIOCGVERSION, &_driverVarsion)) {
             MOOS_DEBUG_LOG("no get driver version for ", devicePath_, strerror(errno));
             close(_fd);
-            delete _device;
             return;
         }
 
-        _device->m_driverVersion = _driverVarsion;
+        _deviceInfo.m_driverVersion = _driverVarsion;
 
 
         struct input_id _inputid;
         if (ioctl(_fd, EVIOCGID, &_inputid)) {
             MOOS_DEBUG_LOG("no get input_id for ", devicePath_, strerror(errno));
             close(_fd);
-            delete _device;
             return;
 
         }
 
-        _device->m_bus = _inputid.bustype;
-        _device->m_product = _inputid.product;
-        _device->m_vendor = _inputid.vendor;
-        _device->m_version = _inputid.version;
+        _deviceInfo.m_bus = _inputid.bustype;
+        _deviceInfo.m_product = _inputid.product;
+        _deviceInfo.m_vendor = _inputid.vendor;
+        _deviceInfo.m_version = _inputid.version;
 
         if (ioctl(_fd, EVIOCGUNIQ(sizeof(buffer) - 1), &buffer) < 1) {
 
         }
         else {
             buffer[sizeof(buffer) - 1] = '\0';
-            _device->setUniqueId(buffer);
+            _deviceInfo.m_uniqueId = buffer;
         }
 
         if (fcntl(_fd, F_SETFL, O_NONBLOCK)) {
             MOOS_DEBUG_LOG("set fd no block fail!!");
             close(_fd);
-            delete _device;
             return;
         }
 
+        MoosDevice *_device = new MoosDevice();
+        _device->m_info = _deviceInfo;
         _device->m_devicePath = devicePath_;
         _device->m_fileId = _fd;
 
@@ -199,19 +197,13 @@ int MoosDevice::s_deviceId = 0;
 
 
 MoosDevice::MoosDevice()
-    : m_deviceName()
-    , m_devicePath()
+    : m_devicePath()
     , m_fileId(-1)
 {
     m_deviceId = ++s_deviceId;
 }
 
-MoosDevice::MoosDevice(std::string &&deviceName_, int fileId_)
-    : m_deviceName(std::forward<std::string>(deviceName_))
-    , m_fileId(fileId_)
-{
-    m_deviceId = ++s_deviceId;
-}
+
 
 MoosDevice::~MoosDevice()
 {
