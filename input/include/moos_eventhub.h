@@ -105,7 +105,7 @@ public:
 
     };
 
-    size_t getEvents(MoosRawEvent* rawEvents_, size_t eventsSize_, int32_t timeOut_ = -1);
+    size_t getEvents(MoosRawEvent* rawEvents_, size_t eventsSize_, int32_t timeOut_ = MOOS_EPOLL_WAIT_TIMEOUT);
 
     void scanDevices();
 
@@ -114,6 +114,7 @@ private:
 
     void openDevice(const char* devicePath_);
     void removeDevice(const char* devicePath_);
+    MoosDevice* getDeviceById(uint32_t id_);
 
 private:
     int m_epollId;
@@ -122,6 +123,7 @@ private:
     static const int s_epoll_notify_id = 0x0506;
 
     static const int s_epoll_max_events = 20;
+    static const int MOOS_EPOLL_WAIT_TIMEOUT = 200;
 
     epoll_event m_epollEvents[s_epoll_max_events];
 

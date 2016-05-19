@@ -21,6 +21,7 @@ const int MOOS_MAX_DEVICE_NAME = 256;
 
 
 
+
 MoosEventHub::MoosEventHub()
 {
     m_epollId = epoll_create(1);
@@ -53,16 +54,44 @@ size_t MoosEventHub::getEvents(MoosRawEvent *rawEvents_, size_t eventsSize_, int
     MOOS_UNUSE(rawEvents_);
     MOOS_UNUSE(eventsSize_);
     MOOS_UNUSE(timeOut_);
+    size_t _re = -1;
     int _eventIndex = 0;
-    int _epollResult = epoll_wait(m_epollId, m_epollEvents, s_epoll_max_events, -1);
-    if (_epollResult > 0) {
-        //
-        while (_eventIndex < _epollResult) {
+    int _epollResult = epoll_wait(m_epollId, m_epollEvents, s_epoll_max_events, timeOut_);
+    do {
+        if (_epollResult == 0) {
+            // time out
+            MOOS_DEBUG_LOG("epoll wait time out!");
+            break;
+
         }
-    }
+
+        if (_epollResult < 0) {
+            // error
+            break;
+        }
+
+        for (epoll_event _t : m_epollEvents) {
+            auto _device = getDeviceById(_t.data.u32);
+            if (!_device) {
+                continue;
+            }
+            input_event _buffer[32];
+            int32_t _readSize = read(_device->id(), _buffer, sizeof(input_event) * 32);
+            if (_readSize == 0 || (_readSize < 0 && errno == ENODEV)) {
+
+            }
 
 
-    return 0;
+
+        }
+
+
+
+    } while(0);
+
+
+
+    return _re;
 }
 
 
@@ -173,12 +202,20 @@ void MoosEventHub::openDevice(const char *devicePath_)
         _device->m_devicePath = devicePath_;
         _device->m_fileId = _fd;
 
+
+
+        struct epoll_event _event;
+        memset(&_event, 0, sizeof(_event));
+        _event.events = EPOLLET | EPOLLIN;
+        _event.data.u32 = _fd;
+        if (epoll_ctl(m_epollId, EPOLL_CTL_ADD, _fd, &_event)) {
+            MOOS_DEBUG_LOG("not add device to epoll error= ", errno);
+            delete _device;
+            return;
+
+        }
+
         m_devices.push_back(_device);
-
-
-
-
-
 
     }
 
@@ -189,6 +226,17 @@ void MoosEventHub::openDevice(const char *devicePath_)
 void MoosEventHub::removeDevice(const char *devicePath_)
 {
 
+}
+
+MoosDevice *MoosEventHub::getDeviceById(uint32_t id_)
+{
+    for (MoosDevice* _t : m_devices) {
+        if (_t->id() == id_) {
+            return _t;
+        }
+    }
+
+    return NULL;
 }
 
 
