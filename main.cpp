@@ -11,6 +11,7 @@
 #include "moos_graphic_button.h"
 #include "moos_logger.h"
 #include "moos_eventhub.h"
+#include "moos_inputmanager.h"
 
 #include <stdlib.h>
 
@@ -147,12 +148,30 @@ void testGraphic(int argc, char *argv[])
 
 }
 
+
+class testEventRe : public MoosObject
+{
+public:
+    void fun(MoosRawEvent* events, size_t s)
+    {
+        for (size_t i = 0; i < s; ++i) {
+            MOOS_DEBUG_LOG(s, events[i].code, events[i].type, events->value);
+        }
+    }
+};
+
 void testEventHub(int argc, char* argv[])
 {
     MoosEventHub hub;
     MoosRawEvent arr[10];
     hub.scanDevices();
-//    hub.getEvents(arr, 10);
+    hub.getEvents(arr, 10);
+    MoosInputManager im;
+    testEventRe re;
+    MOOS_CONNECT(im.m_inputreader->SIG_RAWEVENTS, &re, &testEventRe::fun);
+    im.start();
+
+    Moos::MoosLooper::currentLooper()->exec();
 }
 
 

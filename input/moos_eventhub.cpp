@@ -54,8 +54,8 @@ size_t MoosEventHub::getEvents(MoosRawEvent *rawEvents_, size_t eventsSize_, int
     MOOS_UNUSE(rawEvents_);
     MOOS_UNUSE(eventsSize_);
     MOOS_UNUSE(timeOut_);
-    size_t _re = -1;
-    int _eventIndex = 0;
+    size_t _re = 0;
+//    int _eventIndex = 0;
     int _epollResult = epoll_wait(m_epollId, m_epollEvents, s_epoll_max_events, timeOut_);
     do {
         if (_epollResult == 0) {
@@ -73,6 +73,7 @@ size_t MoosEventHub::getEvents(MoosRawEvent *rawEvents_, size_t eventsSize_, int
         for (epoll_event _t : m_epollEvents) {
             auto _device = getDeviceById(_t.data.u32);
             if (!_device) {
+                MOOS_DEBUG_LOG("device is NULL!");
                 continue;
             }
             input_event _buffer[32];
@@ -100,8 +101,10 @@ size_t MoosEventHub::getEvents(MoosRawEvent *rawEvents_, size_t eventsSize_, int
                     rawEvents_[i].type = _buffer[i].type;
                     rawEvents_[i].value = _buffer[i].value;
                     rawEvents_[i].when = std::chrono::system_clock::now();
+                    rawEvents_[i].deviceId = _device->deviceId();
 
                 }
+                _re = _eventSize;
 
 
             }
@@ -239,6 +242,7 @@ void MoosEventHub::openDevice(const char *devicePath_)
             return;
 
         }
+        MOOS_DEBUG_LOG("add device ", _device->name(), "in epoll");
 
         m_devices.push_back(_device);
 

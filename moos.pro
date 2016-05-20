@@ -11,7 +11,8 @@ SOURCES += main.cpp \
     graphic/ui/moos_point.cpp \
     graphic/ui/moos_size.cpp \
     graphic/engine/moos_paintengine.cpp \
-    input/moos_eventhub.cpp
+    input/moos_eventhub.cpp \
+    input/moos_inputmanager.cpp
 
 
 
@@ -46,4 +47,5 @@ HEADERS += \
     graphic/engine/include/moos_paintdevice.h \
     base/core/include/moos_logger.h \
     base/core/include/moos_tasktype.h \
-    input/include/moos_eventhub.h
+    input/include/moos_eventhub.h \
+    input/include/moos_inputmanager.h

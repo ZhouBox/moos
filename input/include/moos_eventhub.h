@@ -11,6 +11,7 @@
 
 
 #include "moos_defines.h"
+#include "moos_signal.h"
 
 
 DEFINE_NAMESPACE_MOOS_BEGIN
