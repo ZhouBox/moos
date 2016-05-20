@@ -33,7 +33,7 @@ MoosEventHub::MoosEventHub()
     inotify_add_watch(m_notifyId, MOOS_INPUT_PATH, IN_DELETE | IN_CREATE);
     struct epoll_event _eventItem;
     memset(&_eventItem, 0, sizeof(_eventItem));
-    _eventItem.events = EPOLLIN | EPOLLET;
+    _eventItem.events = EPOLLIN;
     _eventItem.data.u32 = s_epoll_notify_id;
     epoll_ctl(m_epollId, EPOLL_CTL_ADD, m_notifyId, &_eventItem);
 
@@ -78,6 +78,31 @@ size_t MoosEventHub::getEvents(MoosRawEvent *rawEvents_, size_t eventsSize_, int
             input_event _buffer[32];
             int32_t _readSize = read(_device->id(), _buffer, sizeof(input_event) * 32);
             if (_readSize == 0 || (_readSize < 0 && errno == ENODEV)) {
+                MOOS_DEBUG_LOG("could not get event, removed?");
+
+            }
+            else if (_readSize < 0) {
+                if (errno != EAGAIN && errno != EINTR) {
+                    MOOS_DEBUG_LOG("could not get event error=", errno);
+                }
+            }
+            else if ((_readSize % sizeof(input_event)) != 0) {
+                MOOS_DEBUG_LOG("counld not get event");
+            }
+            else {
+                size_t _eventSize = _readSize / (sizeof(input_event));
+                if (eventsSize_ < _eventSize) {
+                    MOOS_DEBUG_LOG("some event drop!");
+                    _eventSize = eventsSize_;
+                }
+                for (size_t i = 0; i < _eventSize; ++i) {
+                    rawEvents_[i].code = _buffer[i].code;
+                    rawEvents_[i].type = _buffer[i].type;
+                    rawEvents_[i].value = _buffer[i].value;
+                    rawEvents_[i].when = std::chrono::system_clock::now();
+
+                }
+
 
             }
 
@@ -206,7 +231,7 @@ void MoosEventHub::openDevice(const char *devicePath_)
 
         struct epoll_event _event;
         memset(&_event, 0, sizeof(_event));
-        _event.events = EPOLLET | EPOLLIN;
+        _event.events = EPOLLIN;
         _event.data.u32 = _fd;
         if (epoll_ctl(m_epollId, EPOLL_CTL_ADD, _fd, &_event)) {
             MOOS_DEBUG_LOG("not add device to epoll error= ", errno);
