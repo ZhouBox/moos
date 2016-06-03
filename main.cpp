@@ -162,10 +162,6 @@ public:
 
 void testEventHub(int argc, char* argv[])
 {
-    MoosEventHub hub;
-    MoosRawEvent arr[10];
-    hub.scanDevices();
-    hub.getEvents(arr, 10);
     MoosInputManager im;
     testEventRe re;
     MOOS_CONNECT(im.m_inputreader->SIG_RAWEVENTS, &re, &testEventRe::fun);

@@ -124,7 +124,7 @@ private:
     static const int s_epoll_notify_id = 0x0506;
 
     static const int s_epoll_max_events = 20;
-    static const int MOOS_EPOLL_WAIT_TIMEOUT = 200;
+    static const int MOOS_EPOLL_WAIT_TIMEOUT = 500;
 
     epoll_event m_epollEvents[s_epoll_max_events];
 

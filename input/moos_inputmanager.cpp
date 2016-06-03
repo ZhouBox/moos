@@ -1,5 +1,6 @@
 #include "moos_inputmanager.h"
 #include "moos_eventhub.h"
+#include "moos_logger.h"
 
 DEFINE_NAMESPACE_MOOS_BEGIN
 
@@ -17,6 +18,7 @@ MoosInputReader::MoosInputReader(MoosEventHub* hub_)
 bool MoosInputReader::threadRun()
 {
     size_t _s = m_eventHub->getEvents(S_RAWEVENTS, 32);
+    MOOS_DEBUG_LOG("input event size: ", _s);
     if (_s > 0) {
         SIG_RAWEVENTS.emit(S_RAWEVENTS, std::move(_s));
     }
@@ -31,6 +33,7 @@ MoosInputManager::MoosInputManager()
 
 void MoosInputManager::start()
 {
+    m_eventHub->scanDevices();
     m_inputreader->start();
 }
 

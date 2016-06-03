@@ -57,6 +57,7 @@ size_t MoosEventHub::getEvents(MoosRawEvent *rawEvents_, size_t eventsSize_, int
     size_t _re = 0;
 //    int _eventIndex = 0;
     int _epollResult = epoll_wait(m_epollId, m_epollEvents, s_epoll_max_events, timeOut_);
+    MOOS_DEBUG_LOG("_epollResult : ", _epollResult);
     do {
         if (_epollResult == 0) {
             // time out
@@ -71,6 +72,9 @@ size_t MoosEventHub::getEvents(MoosRawEvent *rawEvents_, size_t eventsSize_, int
         }
 
         for (epoll_event _t : m_epollEvents) {
+            if (!(_t.events & EPOLLIN)) {
+                continue;
+            }
             auto _device = getDeviceById(_t.data.u32);
             if (!_device) {
                 MOOS_DEBUG_LOG("device is NULL!");
