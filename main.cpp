@@ -155,7 +155,7 @@ public:
     void fun(MoosRawEvent* events, size_t s)
     {
         for (size_t i = 0; i < s; ++i) {
-            MOOS_DEBUG_LOG(s, events[i].code, events[i].type, events->value);
+            MOOS_DEBUG_LOG(s, events[i].code, events[i].type, events[i].value);
         }
     }
 };
