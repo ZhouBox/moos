@@ -26,14 +26,14 @@ public:
 
     static MoosLooper* getLooper(const std::thread::id& id_)
     {
+        std::mutex _mutex;
+        std::unique_lock<std::mutex> _lock(_mutex);
         auto _looper = m_loopers.find(id_);
         MoosLooper *_re = NULL;
         if (_looper != m_loopers.end()) {
             _re = (*_looper).second;
         }
         else {
-            std::mutex _mutex;
-            std::unique_lock<std::mutex> _lock(_mutex);
             _re = new MoosLooper();
             m_loopers[id_] = _re;
         }
