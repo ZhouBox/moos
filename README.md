@@ -1,4 +1,9 @@
 # moos
+
+
+[![LICENSE](https://img.shields.io/badge/license-NPL%20(The%20996%20Prohibited%20License)-blue.svg)](https://github.com/996icu/996.ICU/blob/master/LICENSE)
+
+
 a framework base c++11
 
 本人已经完成了一些基础库开发，其中事件循环已经可以正常工作。
